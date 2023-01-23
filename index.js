@@ -362,6 +362,44 @@ function updateEmployeeM() {
   });
 }
 
+function updateEmployeeR() {
+  db.findAllE().then(([rows]) => {
+    let employees = rows;
+    const eChoices = employees.map(({ id, first_name, last_name }) => ({
+      name: `${first_name} ${last_name}`,
+      value: id,
+    }));
+    prompt([
+      {
+        tyoe: "list",
+        name: "employeeId",
+        message: "Which employee's role do you want to update?",
+        choices: eChoices,
+      },
+    ]).then((res) => {
+      let employeeId = res.employeeId;
+      db.findAllR().then(([rows]) => {
+        let roles = rows;
+        const rChoices = roles.map(({ id, title }) => ({
+          name: title,
+          value: id,
+        }));
+        prompt([
+          {
+            type: "list",
+            name: "roleId",
+            message: "which role do you want to assign the selected employee?",
+            choices: rChoices,
+          },
+        ])
+          .then((res) => db.updateEmployeeR(employeeId, res.roleId))
+          .then(() => console.log("Updated employee's role"))
+          .then(() => loadPrompts());
+      });
+    });
+  });
+}
+
 function viewUtilizedBudgetByD() {
   db.viewDBudgets()
     .then(([rows]) => {
@@ -370,6 +408,60 @@ function viewUtilizedBudgetByD() {
       console.table(departments);
     })
     .then(() => loadPrompts());
+}
+
+function viewEByM() {
+  db.findAllE().then(([rows]) => {
+    let managers = rows;
+    const mChoices = managers.map(({ id, first_name, last_name }) => ({
+      name: `${first_name} ${last_name}`,
+      value: id,
+    }));
+    prompt([
+      {
+        type: "list",
+        name: "managerId",
+        message: "WHich employee do you want to see the direct reorts for?",
+        choices: mChoices,
+      },
+    ])
+      .then((res) => db.findAllEmployeesByM(res.managerId))
+      .then(([rows]) => {
+        let employees = rows;
+        console.log("\n");
+        if (employees.length === 0) {
+            console.log('The selected employee has no direct reports');
+        } else {
+            console.log(employees);
+        }
+      })
+      .then(() => loadPrompts());
+  });
+}
+
+function viewEByD() {
+  db.findAllD().then(([rows]) => {
+    let departments = rows;
+    const dChoices = departments.map(({ id, name }) => ({
+      name: name,
+      value: id,
+    }));
+    prompt([
+      {
+        type: "list",
+        name: "departmentId",
+        message: "Which department would you like to see employees for?",
+        choices: dChoices,
+      },
+    ])
+      .then((res) => db.findAllEmployeesByD(res.departmentId))
+      .then(([rows]) => {
+        let employees = rows;
+        console.log("\n");
+        console.table(employees);
+      })
+      .then(() => loadPrompts());
+  });
 }
 
 function quit() {
