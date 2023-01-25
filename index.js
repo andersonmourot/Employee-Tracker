@@ -1,4 +1,4 @@
-const db = reuquire("./db");
+const db = require("./db");
 const logo = require("asciiart-logo");
 const { prompt } = require("inquirer");
 require("console.table");
@@ -19,7 +19,7 @@ function loadPrompts() {
       choices: [
         {
           name: "View All Employees By Department",
-          vaule: "VIEW_EMPLOYEES_BY_DEPARTMENT",
+          value: "VIEW_EMPLOYEES_BY_DEPARTMENT",
         },
         {
           name: "View All Employees By Manager",
@@ -314,7 +314,7 @@ function removeE() {
         type: "list",
         name: "employeeId",
         message: "Which employee do you want to remove?",
-        choice: eChoices,
+        choices: eChoices,
       },
     ])
       .then((res) => db.removeE(res.employeeId))
@@ -356,7 +356,7 @@ function updateEmployeeM() {
         ])
           .then((res) => db.updateEmployeeM(employeeId, res.managerId))
           .then(() => console.log("Updated employee's manager"))
-          .then(() => loadPrompts);
+          .then(() => loadPrompts());
       });
     });
   });
