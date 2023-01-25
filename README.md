@@ -5,7 +5,7 @@
 This app is an employee tracker that uses Inquirer prompts to allow the user to track, add, removes, and updated their information. This app tracks departments, managers, employees, roles, salaries, and ID's.  
 
 ## Video Link
-
+https://drive.google.com/file/d/1F999owyspmHviVsrEadLJz4MP6Ut89Pi/view
 
 ## Table of Contents
 
